@@ -62,12 +62,14 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
               <button className="auth-submit" disabled={!configured} type="submit">
                 创建账户
               </button>
-              <p className="auth-hint">注册后会收到邮箱确认链接，确认完成后就可以返回首页继续学习。</p>
+              <p className="auth-hint">
+                如果 Supabase 开启了邮箱确认，注册后会收到确认链接；如果已关闭确认邮箱，注册后会直接进入学习页。
+              </p>
             </form>
 
             <div className="auth-resend">
               <p className="auth-hint">
-                如果邮箱没收到确认链接，或者你点开后提示失效，可以在这里重新发送一次。
+                只有在开启邮箱确认时才需要重发确认邮件；如果你准备暂时关闭确认邮箱，这一步就不需要了。
               </p>
               <form action={resendSignUpConfirmation} className="auth-form auth-inline-form">
                 <label className="auth-field">

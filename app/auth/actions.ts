@@ -77,7 +77,7 @@ export async function signUp(formData: FormData) {
 
   const emailRedirectTo = await getEmailRedirectTo();
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: emailRedirectTo
@@ -92,6 +92,11 @@ export async function signUp(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
+
+  if (data.session) {
+    redirect("/");
+  }
+
   redirect(buildAuthRedirect("signup", "注册成功，请检查邮箱并点击确认链接。"));
 }
 
