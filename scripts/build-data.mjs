@@ -39,6 +39,37 @@ const sources = [
   },
 ];
 
+function syncMediaToPublic() {
+  const mediaSourceDir = path.join(root, "语法句型");
+  const mediaPublicDir = path.join(publicDir, "语法句型");
+
+  if (fs.existsSync(mediaSourceDir)) {
+    fs.cpSync(mediaSourceDir, mediaPublicDir, { recursive: true, force: true });
+  }
+}
+
+function useExistingPayload() {
+  const existingPayloadPath = path.join(root, "data", "grammar-data.json");
+  const publicPayloadPath = path.join(publicDir, "data", "grammar-data.json");
+
+  if (!fs.existsSync(existingPayloadPath)) {
+    throw new Error(
+      "CSV source files are missing and no prebuilt data/grammar-data.json is available.",
+    );
+  }
+
+  fs.mkdirSync(path.dirname(publicPayloadPath), { recursive: true });
+  fs.copyFileSync(existingPayloadPath, publicPayloadPath);
+  syncMediaToPublic();
+
+  const payload = JSON.parse(fs.readFileSync(existingPayloadPath, "utf8"));
+  console.log(
+    `Reused prebuilt grammar data (${payload.grammarPoints?.length ?? 0} points across ${
+      payload.books?.length ?? 0
+    } books).`,
+  );
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -315,16 +346,23 @@ function buildBook(source) {
 const books = [];
 const grammarPoints = [];
 
-for (const source of sources) {
-  const result = buildBook(source);
-  books.push(result.book);
-  grammarPoints.push(...result.grammarPoints);
-}
+const missingCsvSources = sources.filter((source) => !fs.existsSync(path.join(root, source.csv)));
 
 const outputDir = path.join(root, "data");
 const publicDir = path.join(root, "public");
 fs.mkdirSync(outputDir, { recursive: true });
 fs.mkdirSync(path.join(publicDir, "data"), { recursive: true });
+
+if (missingCsvSources.length > 0) {
+  useExistingPayload();
+  process.exit(0);
+}
+
+for (const source of sources) {
+  const result = buildBook(source);
+  books.push(result.book);
+  grammarPoints.push(...result.grammarPoints);
+}
 
 const payload = JSON.stringify(
   {
@@ -341,12 +379,6 @@ fs.writeFileSync(
   payload,
 );
 fs.writeFileSync(path.join(publicDir, "data", "grammar-data.json"), payload);
-
-const mediaSourceDir = path.join(root, "语法句型");
-const mediaPublicDir = path.join(publicDir, "语法句型");
-
-if (fs.existsSync(mediaSourceDir)) {
-  fs.cpSync(mediaSourceDir, mediaPublicDir, { recursive: true, force: true });
-}
+syncMediaToPublic();
 
 console.log(`Built ${grammarPoints.length} grammar points across ${books.length} books.`);
