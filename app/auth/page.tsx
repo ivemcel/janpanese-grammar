@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { signIn, signUp } from "@/app/auth/actions";
+import { resendSignUpConfirmation, signIn, signUp } from "@/app/auth/actions";
 
 type AuthPageProps = {
   searchParams?: Promise<{
@@ -43,26 +43,43 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
         </div>
 
         {mode === "signup" ? (
-          <form action={signUp} className="auth-form">
-            <label className="auth-field">
-              <span>邮箱</span>
-              <input autoComplete="email" name="email" placeholder="name@example.com" type="email" />
-            </label>
-            <label className="auth-field">
-              <span>密码</span>
-              <input
-                autoComplete="new-password"
-                minLength={6}
-                name="password"
-                placeholder="至少 6 位密码"
-                type="password"
-              />
-            </label>
-            <button className="auth-submit" disabled={!configured} type="submit">
-              创建账户
-            </button>
-            <p className="auth-hint">注册后会收到邮箱确认链接，确认完成后就可以返回首页继续学习。</p>
-          </form>
+          <>
+            <form action={signUp} className="auth-form">
+              <label className="auth-field">
+                <span>邮箱</span>
+                <input autoComplete="email" name="email" placeholder="name@example.com" type="email" />
+              </label>
+              <label className="auth-field">
+                <span>密码</span>
+                <input
+                  autoComplete="new-password"
+                  minLength={6}
+                  name="password"
+                  placeholder="至少 6 位密码"
+                  type="password"
+                />
+              </label>
+              <button className="auth-submit" disabled={!configured} type="submit">
+                创建账户
+              </button>
+              <p className="auth-hint">注册后会收到邮箱确认链接，确认完成后就可以返回首页继续学习。</p>
+            </form>
+
+            <div className="auth-resend">
+              <p className="auth-hint">
+                如果邮箱没收到确认链接，或者你点开后提示失效，可以在这里重新发送一次。
+              </p>
+              <form action={resendSignUpConfirmation} className="auth-form auth-inline-form">
+                <label className="auth-field">
+                  <span>重新发送到</span>
+                  <input autoComplete="email" name="email" placeholder="name@example.com" type="email" />
+                </label>
+                <button className="auth-secondary" disabled={!configured} type="submit">
+                  重新发送确认邮件
+                </button>
+              </form>
+            </div>
+          </>
         ) : (
           <form action={signIn} className="auth-form">
             <label className="auth-field">
