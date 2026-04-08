@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { resendSignUpConfirmation, signIn, signUp } from "@/app/auth/actions";
+import { signIn, signUp } from "@/app/auth/actions";
 
 type AuthPageProps = {
   searchParams?: Promise<{
@@ -17,12 +17,10 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
 
   return (
     <main className="auth-shell">
-      <div className="auth-card">
-        <div className="auth-header">
-          <div className="auth-kicker">SUPABASE AUTH</div>
-          <h1>登录你的语法备考空间</h1>
-          <p>先接入邮箱注册和登录，后面我们再把学习进度同步到云端。</p>
-        </div>
+        <div className="auth-card">
+          <div className="auth-header">
+            <h1>{mode === "signup" ? "注册" : "登录"}</h1>
+          </div>
 
         {!configured ? (
           <div className="auth-message warning">
@@ -62,25 +60,7 @@ export default async function AuthPage({ searchParams }: AuthPageProps) {
               <button className="auth-submit" disabled={!configured} type="submit">
                 创建账户
               </button>
-              <p className="auth-hint">
-                如果 Supabase 开启了邮箱确认，注册后会收到确认链接；如果已关闭确认邮箱，注册后会直接进入学习页。
-              </p>
             </form>
-
-            <div className="auth-resend">
-              <p className="auth-hint">
-                只有在开启邮箱确认时才需要重发确认邮件；如果你准备暂时关闭确认邮箱，这一步就不需要了。
-              </p>
-              <form action={resendSignUpConfirmation} className="auth-form auth-inline-form">
-                <label className="auth-field">
-                  <span>重新发送到</span>
-                  <input autoComplete="email" name="email" placeholder="name@example.com" type="email" />
-                </label>
-                <button className="auth-secondary" disabled={!configured} type="submit">
-                  重新发送确认邮件
-                </button>
-              </form>
-            </div>
           </>
         ) : (
           <form action={signIn} className="auth-form">

@@ -318,31 +318,6 @@ nav {
   line-height: 1.7;
 }
 
-.auth-resend {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(226, 232, 240, 0.95);
-}
-
-.auth-inline-form {
-  margin-top: 12px;
-}
-
-.auth-secondary {
-  border-radius: 16px;
-  border: 1px solid rgba(191, 219, 254, 0.95);
-  background: #eff6ff;
-  color: var(--primary);
-  font-weight: 800;
-  padding: 14px 18px;
-  cursor: pointer;
-}
-
-.auth-secondary:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
 .auth-back {
   display: inline-flex;
   margin-top: 20px;
