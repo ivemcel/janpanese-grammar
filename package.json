@@ -1,0 +1,25 @@
+{
+  "name": "jlpt-n2-grammar-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:data": "node scripts/build-data.mjs",
+    "dev": "node scripts/build-data.mjs && next dev --hostname 127.0.0.1 --port 4173",
+    "build": "node scripts/build-data.mjs && next build",
+    "start": "next start --hostname 127.0.0.1 --port 4173"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.10.0",
+    "@supabase/supabase-js": "^2.102.1",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}

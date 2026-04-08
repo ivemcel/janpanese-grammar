@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>N2 语法备考</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-logo">📘 N2 语法备考</div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-page="home" type="button">选择书籍</button>
+        <button class="nav-tab" data-page="grammar" type="button">语法速查</button>
+        <button class="nav-tab" data-page="review" type="button">复习</button>
+        <button class="nav-tab" data-page="dashboard" type="button">仪表盘</button>
+      </div>
+      <select class="book-switcher" id="globalBook" aria-label="切换教材"></select>
+    </nav>
+
+    <div class="container">
+      <div class="page active" id="page-home">
+        <div class="hero">
+          <h1>选择你的语法教材</h1>
+          <p>选书 → 看图 → 记忆 → 复习 → 检验，五步闭环</p>
+        </div>
+        <div class="book-grid" id="bookGrid"></div>
+      </div>
+
+      <div class="page" id="page-grammar">
+        <div class="section-header">
+          <h2 id="grammar-title">📘 新完全掌握 N2 · 语法速查</h2>
+          <button class="back-btn" id="switchBookBtn" type="button">&larr; 切换书籍</button>
+        </div>
+        <input
+          class="search-box"
+          id="grammarSearch"
+          type="search"
+          placeholder="🔍 搜索句型、释义或关键词…"
+        />
+        <div class="grammar-toolbar" id="grammarToolbar"></div>
+        <div class="grammar-list" id="grammarList"></div>
+      </div>
+
+      <div class="page" id="page-review">
+        <div class="section-header">
+          <h2>🧠 复习模式</h2>
+        </div>
+        <div class="mode-tabs" id="reviewModes">
+          <button class="mode-tab active" data-mode="recognition" type="button">👀 识别模式</button>
+          <button class="mode-tab" data-mode="recall" type="button">🧩 回忆模式</button>
+        </div>
+        <div class="review-settings">
+          <label class="setting-item">
+            <input id="toggleScene" type="checkbox" checked />
+            <span>显示场景图</span>
+          </label>
+          <label class="setting-item">
+            <input id="toggleAutoplay" type="checkbox" />
+            <span>自动播放音频</span>
+          </label>
+        </div>
+        <div class="flashcard-container">
+          <div class="fc-progress" id="fcProgress">1 / 8</div>
+          <div class="fc-wrapper" id="fcWrapper">
+            <div class="fc-inner" id="fcInner">
+              <div class="fc-face fc-front">
+                <div class="fc-label" id="fcFrontLabel">句型</div>
+                <div class="fc-scene-inline" id="fcFrontScene"></div>
+                <div class="fc-pattern" id="fcFrontContent">～ばかりか</div>
+                <button class="fc-audio hidden" id="fcFrontAudio" type="button">🔊 播放音频</button>
+                <div class="fc-hint">点击翻转 →</div>
+              </div>
+              <div class="fc-face fc-back">
+                <div class="fc-scene" id="fcScene">📘</div>
+                <div class="fc-back-pattern hidden" id="fcBackPattern">～ばかりか</div>
+                <div class="fc-meaning" id="fcMeaning">不仅…而且…</div>
+                <div class="fc-example" id="fcExample">彼は日本語ばかりか、中国語も話せる。</div>
+                <div class="fc-example-zh" id="fcExampleZh">他不仅会日语，还会中文。</div>
+                <button class="fc-audio" id="fcBackAudio" type="button">🔊 播放音频</button>
+              </div>
+            </div>
+          </div>
+          <div class="fc-actions">
+            <button class="fc-btn forget" data-review-result="forget" type="button">❌ 不认识</button>
+            <button class="fc-btn fuzzy" data-review-result="fuzzy" type="button">🤔 模糊</button>
+            <button class="fc-btn know" data-review-result="know" type="button">✅ 认识</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-dashboard">
+        <div class="section-header">
+          <h2>📊 学习仪表盘</h2>
+        </div>
+        <div class="dash-grid" id="dashGrid"></div>
+        <div class="dashboard-detail">
+          <div>
+            <h3 class="subheading">掌握进度</h3>
+            <div class="progress-ring">
+              <svg width="160" height="160">
+                <circle class="ring-bg" cx="80" cy="80" r="68" fill="none" stroke-width="12"></circle>
+                <circle
+                  class="ring-fill"
+                  id="ringFill"
+                  cx="80"
+                  cy="80"
+                  r="68"
+                  fill="none"
+                  stroke-width="12"
+                  stroke-dasharray="427"
+                  stroke-dashoffset="427"
+                ></circle>
+              </svg>
+              <div class="ring-text" id="ringText">0%</div>
+            </div>
+            <h3 class="subheading">打卡日历</h3>
+            <div class="streak-cal" id="streakCal"></div>
+          </div>
+          <div>
+            <h3 class="subheading">薄弱句型 TOP 5</h3>
+            <div class="weak-list" id="weakList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
